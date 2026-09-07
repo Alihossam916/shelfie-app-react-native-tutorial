@@ -16,14 +16,14 @@ export default Contact;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 60,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    textDecorationLine: 'underline'
+    textDecorationLine: "underline",
   },
   link: {
     color: "#000",
