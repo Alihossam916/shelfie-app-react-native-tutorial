@@ -1,23 +1,36 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Link } from "expo-router";
 
-const logo = require("../assets/images/frame_03_edited.png");
+// themed components
+import ThemedView from "../components/themedView";
+import ThemedLogo from "../components/themedLogo";
+import ThemedText from "../components/themedText";
+import Spacer from "../components/spacer";
+
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.img} />
-      <Text style={styles.text}>The Number 1</Text>
-      <Text style={styles.secondaryText}>reading list app</Text>
-      <Text style={styles.acheivment}>
-        finally fixed the expo sdk version problem
-      </Text>
+    <ThemedView style={styles.container}>
+      <ThemedLogo />
+      <Spacer height={30} />
+
+      <ThemedText style={styles.text} title={true}>
+        The Number 1
+      </ThemedText>
+
+      <Spacer height={10} />
+      <ThemedText style={styles.secondaryText}>reading list app</ThemedText>
+      <Spacer />
+
       <Link href={"/about"} style={styles.link}>
-        about page
+        <ThemedText>about page</ThemedText>
       </Link>
+
+      <Spacer height={20} />
+
       <Link href={"/contact"} style={styles.link}>
-        contact page
+        <ThemedText>contact page</ThemedText>
       </Link>
-    </View>
+    </ThemedView>
   );
 };
 
@@ -28,36 +41,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "green",
   },
   text: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "white",
   },
   secondaryText: {
     fontSize: 20,
     fontWeight: "semibold",
-    color: "gray",
     padding: 10,
-  },
-  img: {
-    marginVertical: 30,
-  },
-  acheivment: {
-    color: "red",
-    boxShadow: "1px 1px 4px 4px #fff",
-    padding: 20,
-    marginBottom: 10,
   },
   link: {
     padding: 10,
     margin: 5,
-    color: "white",
     fontSize: 20,
-    fontWeight: "bold",
-    borderColor: "white",
-    borderWidth: 2,
-    borderStyle: "solid",
+    textDecorationLine: "underline",
   },
 });

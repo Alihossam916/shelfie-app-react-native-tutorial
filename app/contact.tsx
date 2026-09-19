@@ -1,14 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Link } from "expo-router";
+
+// themed components
+import ThemedView from "../components/themedView";
+import ThemedText from "../components/themedText";
+import Spacer from "../components/spacer";
 
 const Contact = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Contact</Text>
-      <Link href={"/"} style={styles.link}>
-        return to home page
+    <ThemedView style={[styles.container]}>
+      <ThemedText style={[styles.title]} title={true}>
+        Contact Page
+      </ThemedText>
+
+      <Spacer height={20} />
+
+      <Link href={"/"} style={[styles.link]}>
+        <ThemedText>return to home page</ThemedText>
       </Link>
-    </View>
+    </ThemedView>
   );
 };
 
@@ -23,16 +33,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: "bold",
-    textDecorationLine: "underline",
   },
   link: {
     color: "#000",
     padding: 14,
-    marginVertical: 10,
-    borderColor: "black",
-    borderWidth: 2,
-    borderStyle: "solid",
-    fontSize: 14,
-    fontWeight: "bold",
+    fontSize: 20,
+    textDecorationLine: "underline",
   },
 });

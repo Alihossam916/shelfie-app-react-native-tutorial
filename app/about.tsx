@@ -1,17 +1,24 @@
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Link } from "expo-router";
-import { Colors } from "../constants/colors";
+
+// themed components
+import ThemedView from "../components/themedView";
+import ThemedText from "../components/themedText";
+import Spacer from "../components/spacer";
 
 const About = () => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme ?? "light"];
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.text, { color: theme.title }]}>About</Text>
-      <Link href={"/"} style={[styles.link, { color: theme.text }]}>
-        return to home page
+    <ThemedView style={[styles.container]}>
+      <ThemedText style={[styles.text]} title={true}>
+        About Page
+      </ThemedText>
+
+      <Spacer height={20} />
+
+      <Link href={"/"} style={[styles.link]}>
+        <ThemedText>return to home page</ThemedText>
       </Link>
-    </View>
+    </ThemedView>
   );
 };
 
@@ -22,7 +29,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#000",
   },
   text: {
     fontSize: 30,
@@ -32,9 +38,6 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     fontSize: 20,
-    fontWeight: "bold",
-    borderColor: "white",
-    borderWidth: 2,
-    borderStyle: "solid",
+    textDecorationLine: "underline",
   },
 });
