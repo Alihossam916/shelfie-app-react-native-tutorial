@@ -21,14 +21,14 @@ const Home = () => {
       <ThemedText style={styles.secondaryText}>reading list app</ThemedText>
       <Spacer />
 
-      <Link href={"/about"} style={styles.link}>
-        <ThemedText>about page</ThemedText>
+      <Link href={"/login"} style={styles.link}>
+        <ThemedText>Login page</ThemedText>
       </Link>
 
       <Spacer height={20} />
 
-      <Link href={"/contact"} style={styles.link}>
-        <ThemedText>contact page</ThemedText>
+      <Link href={"/register"} style={styles.link}>
+        <ThemedText>Register page</ThemedText>
       </Link>
     </ThemedView>
   );
