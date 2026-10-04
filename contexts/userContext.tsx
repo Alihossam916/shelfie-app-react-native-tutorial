@@ -1,4 +1,6 @@
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import { account } from "../lib/appwrite";
+import { ID } from "react-native-appwrite";
 
 interface AuthProps {
   email: string;
@@ -9,6 +11,7 @@ interface User {
   // define user fields later if needed
   id?: string;
   email?: string;
+  name?: string;
 }
 
 interface UserContextType {
@@ -28,11 +31,36 @@ const defaultValue: UserContextType = {
 export const userContext = createContext(defaultValue);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  async function login({ email, password }: AuthProps) {}
-  async function register({ email, password }: AuthProps) {}
-  async function logout() {}
+  useEffect(() => {
+    account
+      .get()
+      .then(setUser)
+      .catch(() => setUser(null));
+  }, []);
+
+  async function login({ email, password }: AuthProps) {
+    try {
+      await account.createEmailPasswordSession(email, password);
+      const response = await account.get();
+      setUser(response);
+    } catch (error: any) {
+      throw Error(error.message);
+    }
+  }
+  async function register({ email, password }: AuthProps) {
+    try {
+      await account.create(ID.unique(), email, password);
+      await login({ email, password });
+    } catch (error: any) {
+      throw Error(error.message);
+    }
+  }
+  async function logout() {
+    await account.deleteSession("current");
+    setUser(null);
+  }
 
   return (
     <userContext.Provider value={{ user, login, register, logout }}>
