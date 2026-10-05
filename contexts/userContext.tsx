@@ -16,6 +16,7 @@ interface User {
 
 interface UserContextType {
   user: User | null;
+  authChecked: boolean;
   login: ({ email, password }: AuthProps) => Promise<void>;
   register: ({ email, password }: AuthProps) => Promise<void>;
   logout: () => void;
@@ -23,6 +24,7 @@ interface UserContextType {
 
 const defaultValue: UserContextType = {
   user: null,
+  authChecked: false,
   login: async () => {},
   register: async () => {},
   logout: () => {},
@@ -71,7 +73,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <userContext.Provider value={{ user, login, register, logout }}>
+    <userContext.Provider
+      value={{ user, authChecked, login, register, logout }}
+    >
       {children}
     </userContext.Provider>
   );
