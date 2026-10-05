@@ -32,12 +32,10 @@ export const userContext = createContext(defaultValue);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    account
-      .get()
-      .then(setUser)
-      .catch(() => setUser(null));
+    getInitialUserValue();
   }, []);
 
   async function login({ email, password }: AuthProps) {
@@ -60,6 +58,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   async function logout() {
     await account.deleteSession("current");
     setUser(null);
+  }
+
+  async function getInitialUserValue() {
+    try {
+      account.get().then(setUser);
+    } catch (error) {
+      setUser(null);
+    } finally {
+      setAuthChecked(true);
+    }
   }
 
   return (
