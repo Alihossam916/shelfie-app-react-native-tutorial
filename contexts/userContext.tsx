@@ -64,7 +64,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   async function getInitialUserValue() {
     try {
-      account.get().then(setUser);
+      const user = await account.get();
+      setUser(user);
     } catch (error) {
       setUser(null);
     } finally {
