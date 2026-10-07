@@ -3,6 +3,9 @@ import { Text } from "react-native";
 import { useUser } from "../../hooks/useUser";
 import { useRouter } from "expo-router";
 
+// themed components
+import ThemedLoader from "../themedLoader";
+
 const GuestOnly = ({ children }: { children: React.ReactNode }) => {
   const { user, authChecked } = useUser();
   const router = useRouter();
@@ -14,7 +17,7 @@ const GuestOnly = ({ children }: { children: React.ReactNode }) => {
   }, [user, authChecked]);
 
   if (!authChecked || user) {
-    return <Text>Loading...</Text>;
+    return <ThemedLoader />;
   }
 
   return children;
