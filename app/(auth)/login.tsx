@@ -4,7 +4,7 @@ import {
   Text,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
 import { useUser } from "../../hooks/useUser";
 import { Colors } from "../../constants/colors";
@@ -20,6 +20,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const { login } = useUser();
 
@@ -28,6 +29,7 @@ const Login = () => {
 
     try {
       await login({ email, password });
+      router.replace("../(dashboard)/profile");
     } catch (error: any) {
       setError(error.message);
     }
