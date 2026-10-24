@@ -8,8 +8,7 @@ interface AuthProps {
 }
 
 interface User {
-  // define user fields later if needed
-  id?: string;
+  $id?: string;
   email?: string;
   name?: string;
 }
