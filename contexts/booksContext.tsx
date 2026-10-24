@@ -1,10 +1,12 @@
 import React, { createContext, useState } from "react";
+import { databases } from "../lib/appwrite";
+import { ID, Permission, Role } from "react-native-appwrite";
+import { useUser } from "../hooks/useUser";
 
 interface BooksProps {
-  id: string;
   title: string;
   description: string;
-  auther: string;
+  author: string;
 }
 
 interface BooksContenxtProps {
@@ -30,6 +32,7 @@ export const booksContext = createContext(defaultValues);
 
 export function BooksProvider({ children }: { children: React.ReactNode }) {
   const [books, setBooks] = useState<BooksProps | []>([]);
+  const { user } = useUser();
 
   async function fetchBooks() {
     try {
@@ -47,6 +50,21 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
 
   async function createBook(data: BooksProps) {
     try {
+      if (!user?.$id) {
+        throw new Error("You must be logged in to create a book");
+      }
+
+      const newBook = await databases.createDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        ID.unique(),
+        { ...data, userId: user?.$id },
+        [
+          Permission.read(Role.user(user?.$id)),
+          Permission.update(Role.user(user?.$id)),
+          Permission.delete(Role.user(user?.$id)),
+        ],
+      );
     } catch (error: any) {
       console.error(error.message);
     }
