@@ -1,19 +1,21 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { databases } from "../lib/appwrite";
-import { ID, Permission, Role } from "react-native-appwrite";
+import { ID, Models, Permission, Query, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
 
-interface BooksProps {
+interface BookInput {
   title: string;
   description: string;
   author: string;
 }
 
+export type Book = Models.Document & BookInput;
+
 interface BooksContenxtProps {
-  books: BooksProps | [];
+  books: Book[];
   fetchBooks: () => Promise<void>;
   fetchBookById: (id: string) => Promise<void>;
-  createBook: (data: BooksProps) => Promise<void>;
+  createBook: (data: BookInput) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
 }
 
@@ -31,11 +33,23 @@ const COLLECTION_ID = "6ac7bd89001a6f3b5c4b";
 export const booksContext = createContext(defaultValues);
 
 export function BooksProvider({ children }: { children: React.ReactNode }) {
-  const [books, setBooks] = useState<BooksProps | []>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const { user } = useUser();
 
   async function fetchBooks() {
     try {
+      if (!user?.$id) {
+        throw new Error("You must be logged in to create a book");
+      }
+
+      const response = await databases.listDocuments<Book>(
+        DATABASE_ID,
+        COLLECTION_ID,
+        [Query.equal("userId", user?.$id)],
+      );
+
+      setBooks(response.documents);
+      console.log(response.documents);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -48,7 +62,7 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function createBook(data: BooksProps) {
+  async function createBook(data: BookInput) {
     try {
       if (!user?.$id) {
         throw new Error("You must be logged in to create a book");
@@ -76,6 +90,16 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
       console.error(error.message);
     }
   }
+
+  useEffect(() => {
+
+    if (user) {
+      fetchBooks();
+    } else {
+      setBooks([]);
+    }
+    
+  }, [user]);
 
   return (
     <booksContext.Provider
