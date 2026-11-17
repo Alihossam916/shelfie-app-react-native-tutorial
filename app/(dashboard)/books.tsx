@@ -22,6 +22,7 @@ const Books = () => {
       <Spacer />
       <FlatList
         data={books}
+        style={{ overflow: "scroll" }}
         keyExtractor={(item) => item.$id}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
