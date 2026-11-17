@@ -94,8 +94,13 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function deleteBook(id: string | number) {
+  async function deleteBook(id: string) {
     try {
+      await databases.deleteDocument(
+        DATABASE_ID,
+        COLLECTION_ID,
+        id,
+      )
     } catch (error: any) {
       console.error(error.message);
     }
