@@ -3,7 +3,7 @@ import { databases } from "../lib/appwrite";
 import { ID, Models, Permission, Query, Role } from "react-native-appwrite";
 import { useUser } from "../hooks/useUser";
 
-interface BookInput {
+export interface BookInput {
   title: string;
   description: string;
   author: string;
@@ -14,7 +14,7 @@ export type Book = Models.Document & BookInput;
 interface BooksContenxtProps {
   books: Book[];
   fetchBooks: () => Promise<void>;
-  fetchBookById: (id: string) => Promise<void>;
+  fetchBookById: (id: string) => Promise<Book>;
   createBook: (data: BookInput) => Promise<void>;
   deleteBook: (id: string) => Promise<void>;
 }
@@ -22,7 +22,9 @@ interface BooksContenxtProps {
 const defaultValues: BooksContenxtProps = {
   books: [],
   fetchBooks: async () => {},
-  fetchBookById: async () => {},
+  fetchBookById: async (id: string): Promise<Book> => {
+    throw new Error("BooksProvider is missing");
+  },
   createBook: async () => {},
   deleteBook: async () => {},
 };
@@ -55,10 +57,18 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  async function fetchBookById(id: string) {
+  async function fetchBookById(id: string): Promise<Book> {
     try {
+      const response = await databases.getDocument<Book>(
+        DATABASE_ID,
+        COLLECTION_ID,
+        id,
+      );
+
+      return response;
     } catch (error: any) {
       console.error(error.message);
+      throw error;
     }
   }
 
@@ -92,13 +102,11 @@ export function BooksProvider({ children }: { children: React.ReactNode }) {
   }
 
   useEffect(() => {
-
     if (user) {
       fetchBooks();
     } else {
       setBooks([]);
     }
-    
   }, [user]);
 
   return (
